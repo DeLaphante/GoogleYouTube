@@ -4,11 +4,11 @@ using System;
 
 namespace GoogleAutomation.PageObjects.CommonPages
 {
-    public class GoogleHomePage : Navigation
+    public class GoogleHomePage
     {
         IWebDriver _Driver;
 
-        public GoogleHomePage(IWebDriver driver) : base(driver)
+        public GoogleHomePage(IWebDriver driver)
         {
             _Driver = driver;
         }

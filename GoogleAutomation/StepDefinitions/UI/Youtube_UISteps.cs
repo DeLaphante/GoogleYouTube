@@ -15,13 +15,13 @@ namespace DemoAutomation.StepDefinitions.UI
             _YoutubeHomePage = scenarioContext.ScenarioContainer.Resolve<YoutubeHomePage>();
         }
 
-        [When(@"user searches for '([^']*)' on youtube search")]
+        [StepDefinition(@"user searches for '([^']*)' on youtube search")]
         public void WhenUserSearchFor(string text)
         {
             _YoutubeHomePage.Search(text);
         }
 
-        [Then(@"a youtube search results with atleast '([^']*)' items is displayed")]
+        [StepDefinition(@"a youtube search results with atleast '([^']*)' items is displayed")]
         public void ThenASearchResultsWithAtleastItemsIsDisplayed(int numberOfItems)
         {
             _YoutubeHomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);

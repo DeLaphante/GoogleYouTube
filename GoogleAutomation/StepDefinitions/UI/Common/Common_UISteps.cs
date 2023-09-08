@@ -13,16 +13,16 @@ namespace GoogleAutomation.StepDefinitions.UI.Common
             _Navigation = scenarioContext.ScenarioContainer.Resolve<Navigation>();
         }
 
-        [StepDefinition(@"user is on the homepage")]
+        [StepDefinition(@"user is on the Google search homepage")]
         public void GivenUserNavigatesToTheHomePage()
         {
-            _Navigation.NavigateToHomePage();
+            _Navigation.NavigateToGoogleSearchHomePage();
         }
 
         [StepDefinition(@"user is on the Youtube homepage")]
         public void GivenUserNavigatesToTheYoutubeHomePage()
         {
-            _Navigation.NavigateToYoutube();
+            _Navigation.NavigateToYoutubeHomePage();
         }
 
     }

@@ -22,26 +22,19 @@ namespace GoogleAutomation.PageObjects.CommonPages
 
         #region Actions
 
-        public void NavigateToHomePage()
+        public void NavigateToGoogleSearchHomePage()
         {
             _Driver.Navigate().GoToUrl(CynkyConfigManager.SiteUrl);
             if (Button("Reject all").ElementExists())
-                ClickButton("Reject all");
+                Button("Reject all").Click();
         }
 
-        public void NavigateToYoutube()
+        public void NavigateToYoutubeHomePage()
         {
             _Driver.Navigate().GoToUrl("https://www.youtube.com/");
             if (Youtube_button("Reject all").ElementExists())
                 Youtube_button("Reject all").Click();
         }
-
-        public void ClickButton(string text, int index = 1)
-        {
-            Button(text, index).Click();
-        }
-
-
 
         #endregion
     }

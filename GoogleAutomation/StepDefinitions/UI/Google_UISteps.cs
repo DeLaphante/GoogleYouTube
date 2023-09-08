@@ -15,13 +15,13 @@ namespace DemoAutomation.StepDefinitions.UI
             _GoogleHomePage = scenarioContext.ScenarioContainer.Resolve<GoogleHomePage>();
         }
 
-        [When(@"user searches for '([^']*)' on google search")]
+        [StepDefinition(@"user searches for '([^']*)' on google search")]
         public void WhenUserSearchFor(string text)
         {
             _GoogleHomePage.Search(text);
         }
 
-        [Then(@"a google search results with atleast '([^']*)' items is displayed")]
+        [StepDefinition(@"a google search results with atleast '([^']*)' items is displayed")]
         public void ThenASearchResultsWithAtleastItemsIsDisplayed(int numberOfItems)
         {
             _GoogleHomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);
