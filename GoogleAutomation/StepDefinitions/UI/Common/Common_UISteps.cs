@@ -19,6 +19,11 @@ namespace GoogleAutomation.StepDefinitions.UI.Common
             _Navigation.NavigateToHomePage();
         }
 
+        [StepDefinition(@"user is on the Youtube homepage")]
+        public void GivenUserNavigatesToTheYoutubeHomePage()
+        {
+            _Navigation.NavigateToYoutube();
+        }
 
     }
 }

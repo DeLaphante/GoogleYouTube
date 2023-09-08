@@ -8,23 +8,23 @@ namespace DemoAutomation.StepDefinitions.UI
     public class Google_UISteps
     {
 
-        HomePage _HomePage;
+        GoogleHomePage _GoogleHomePage;
 
         public Google_UISteps(ScenarioContext scenarioContext)
         {
-            _HomePage = scenarioContext.ScenarioContainer.Resolve<HomePage>();
+            _GoogleHomePage = scenarioContext.ScenarioContainer.Resolve<GoogleHomePage>();
         }
 
-        [When(@"user search for '([^']*)'")]
+        [When(@"user searches for '([^']*)' on google search")]
         public void WhenUserSearchFor(string text)
         {
-            _HomePage.Search(text);
+            _GoogleHomePage.Search(text);
         }
 
-        [Then(@"a search results with atleast '([^']*)' items is displayed")]
+        [Then(@"a google search results with atleast '([^']*)' items is displayed")]
         public void ThenASearchResultsWithAtleastItemsIsDisplayed(int numberOfItems)
         {
-            _HomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);
+            _GoogleHomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);
         }
 
 

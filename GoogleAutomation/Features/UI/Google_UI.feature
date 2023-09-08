@@ -1,9 +1,9 @@
 ﻿Feature: Google_UI
 
 
-Scenario: Search
+Scenario: Google Search
 	Given user is on the homepage
-	When user search for 'Test Automation'
-	Then a search results with atleast '5' items is displayed
+	When user searches for 'Test Automation' on google search
+	Then a google search results with atleast '5' items is displayed
 
 

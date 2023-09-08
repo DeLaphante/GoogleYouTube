@@ -16,6 +16,7 @@ namespace GoogleAutomation.PageObjects.CommonPages
         #region Locators
 
         PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//button[contains(.,'{text}')])[{index}]"));
+        PageElement Youtube_button(string text) => new PageElement(_Driver, By.XPath($"//button[contains(.,'{text}') and contains(@class,'button-shape')]"));
 
         #endregion
 
@@ -26,6 +27,13 @@ namespace GoogleAutomation.PageObjects.CommonPages
             _Driver.Navigate().GoToUrl(CynkyConfigManager.SiteUrl);
             if (Button("Reject all").ElementExists())
                 ClickButton("Reject all");
+        }
+
+        public void NavigateToYoutube()
+        {
+            _Driver.Navigate().GoToUrl("https://www.youtube.com/");
+            if (Youtube_button("Reject all").ElementExists())
+                Youtube_button("Reject all").Click();
         }
 
         public void ClickButton(string text, int index = 1)
