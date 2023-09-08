@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Personal\\source\\repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj": {}
+    "C:\\Users\\Personal\\Source\\Repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Personal\\source\\repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj": {
+    "C:\\Users\\Personal\\Source\\Repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Personal\\source\\repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj",
+        "projectUniqueName": "C:\\Users\\Personal\\Source\\Repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj",
         "projectName": "GoogleAutomation",
-        "projectPath": "C:\\Users\\Personal\\source\\repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj",
+        "projectPath": "C:\\Users\\Personal\\Source\\Repos\\GoogleAutomation\\GoogleAutomation\\GoogleAutomation.csproj",
         "packagesPath": "C:\\Users\\Personal\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Personal\\source\\repos\\GoogleAutomation\\GoogleAutomation\\obj\\",
+        "outputPath": "C:\\Users\\Personal\\Source\\Repos\\GoogleAutomation\\GoogleAutomation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Personal\\source\\repos\\GoogleAutomation\\NuGet.Config",
+          "C:\\Users\\Personal\\Source\\Repos\\GoogleAutomation\\NuGet.Config",
           "C:\\Users\\Personal\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
