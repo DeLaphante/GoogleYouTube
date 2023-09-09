@@ -2,7 +2,7 @@
 using OpenQA.Selenium;
 using System;
 
-namespace GoogleAutomation.PageObjects.CommonPages
+namespace GoogleYoutube.PageObjects.CommonPages
 {
     public class YoutubeHomePage
     {
