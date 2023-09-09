@@ -16,7 +16,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
         #region Locators
 
         PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//button[contains(.,'{text}')])[{index}]"));
-        PageElement Youtube_button(string text) => new PageElement(_Driver, By.XPath($"//button[contains(.,'{text}') and contains(@class,'button-shape')]"));
+        PageElement YouTube_button(string text) => new PageElement(_Driver, By.XPath($"//button[contains(.,'{text}') and contains(@class,'button-shape')]"));
 
         #endregion
 
@@ -29,11 +29,11 @@ namespace GoogleYouTube.PageObjects.CommonPages
                 Button("Reject all").Click();
         }
 
-        public void NavigateToYoutubeHomePage()
+        public void NavigateToYouTubeHomePage()
         {
             _Driver.Navigate().GoToUrl("https://www.youtube.com/");
-            if (Youtube_button("Reject all").ElementExists())
-                Youtube_button("Reject all").Click();
+            if (YouTube_button("Reject all").ElementExists())
+                YouTube_button("Reject all").Click();
         }
 
         #endregion

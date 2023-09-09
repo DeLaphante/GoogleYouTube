@@ -19,10 +19,10 @@ namespace GoogleYouTube.StepDefinitions.UI.Common
             _Navigation.NavigateToGoogleSearchHomePage();
         }
 
-        [StepDefinition(@"user is on the Youtube homepage")]
-        public void GivenUserNavigatesToTheYoutubeHomePage()
+        [StepDefinition(@"user is on the YouTube homepage")]
+        public void GivenUserNavigatesToTheYouTubeHomePage()
         {
-            _Navigation.NavigateToYoutubeHomePage();
+            _Navigation.NavigateToYouTubeHomePage();
         }
 
     }

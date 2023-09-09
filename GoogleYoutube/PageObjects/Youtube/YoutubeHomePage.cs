@@ -4,11 +4,11 @@ using System;
 
 namespace GoogleYouTube.PageObjects.CommonPages
 {
-    public class YoutubeHomePage
+    public class YouTubeHomePage
     {
         IWebDriver _Driver;
 
-        public YoutubeHomePage(IWebDriver driver)
+        public YouTubeHomePage(IWebDriver driver)
         {
             _Driver = driver;
         }

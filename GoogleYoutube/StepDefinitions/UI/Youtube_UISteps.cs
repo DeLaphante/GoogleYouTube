@@ -5,26 +5,26 @@ using TechTalk.SpecFlow;
 namespace GoogleYouTube.StepDefinitions.UI
 {
     [Binding]
-    public class Youtube_UISteps
+    public class YouTube_UISteps
     {
 
-        YoutubeHomePage _YoutubeHomePage;
+        YouTubeHomePage _YouTubeHomePage;
 
-        public Youtube_UISteps(ScenarioContext scenarioContext)
+        public YouTube_UISteps(ScenarioContext scenarioContext)
         {
-            _YoutubeHomePage = scenarioContext.ScenarioContainer.Resolve<YoutubeHomePage>();
+            _YouTubeHomePage = scenarioContext.ScenarioContainer.Resolve<YouTubeHomePage>();
         }
 
-        [StepDefinition(@"user searches for '([^']*)' on youtube search")]
+        [StepDefinition(@"user searches for '([^']*)' on YouTube search")]
         public void WhenUserSearchFor(string text)
         {
-            _YoutubeHomePage.Search(text);
+            _YouTubeHomePage.Search(text);
         }
 
-        [StepDefinition(@"a youtube search results with atleast '([^']*)' items is displayed")]
+        [StepDefinition(@"a YouTube search results with atleast '([^']*)' items is displayed")]
         public void ThenASearchResultsWithAtleastItemsIsDisplayed(int numberOfItems)
         {
-            _YoutubeHomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);
+            _YouTubeHomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);
         }
 
 
