@@ -2,7 +2,7 @@
 using CynkyWrapper.Configuration;
 using OpenQA.Selenium;
 
-namespace GoogleYoutube.PageObjects.CommonPages
+namespace GoogleYouTube.PageObjects.CommonPages
 {
     public class Navigation
     {

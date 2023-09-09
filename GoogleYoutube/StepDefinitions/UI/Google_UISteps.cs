@@ -1,8 +1,8 @@
 using FluentAssertions;
-using GoogleYoutube.PageObjects.CommonPages;
+using GoogleYouTube.PageObjects.CommonPages;
 using TechTalk.SpecFlow;
 
-namespace GoogleYoutube.StepDefinitions.UI
+namespace GoogleYouTube.StepDefinitions.UI
 {
     [Binding]
     public class Google_UISteps

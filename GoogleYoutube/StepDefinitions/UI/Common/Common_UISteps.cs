@@ -1,7 +1,7 @@
-﻿using GoogleYoutube.PageObjects.CommonPages;
+﻿using GoogleYouTube.PageObjects.CommonPages;
 using TechTalk.SpecFlow;
 
-namespace GoogleYoutube.StepDefinitions.UI.Common
+namespace GoogleYouTube.StepDefinitions.UI.Common
 {
     [Binding]
     public sealed class Common_UISteps

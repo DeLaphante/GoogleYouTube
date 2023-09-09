@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 
-namespace GoogleYoutube.Configuration
+namespace GoogleYouTube.Configuration
 {
     public class ConfigManager
     {
