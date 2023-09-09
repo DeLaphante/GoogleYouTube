@@ -1,4 +1,4 @@
-# GoogleAutomation
+# GoogleYoutube
 Demonstration of automating Google & Youtube Search scenarios powered by [CynkyAutomation](https://github.com/DeLaphante/CynkyAutomation)
 
 *** Running scenarios on Browserstack - Safari Ventura ***
