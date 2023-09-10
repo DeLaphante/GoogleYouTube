@@ -1,6 +1,20 @@
 # GoogleYouTube
 Demonstration of automating Google & YouTube Search scenarios powered by [CynkyAutomation](https://github.com/DeLaphante/CynkyAutomation)
 
+- Same C# Framework (CynkyAutomation)
+
+- Same browser automation tool (Selenium)
+
+- Same code structure and pattern
+
+- No Thread.Sleeps or implicit waits
+
+- No test retries 
+
+- Different challenges and hurdles
+
+- Stable and no flaky results
+
 *** Running scenarios on Browserstack - Safari Ventura ***
 
 - Youtube Search -
