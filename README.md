@@ -9,6 +9,8 @@ Demonstration of automating Google & YouTube Search scenarios powered by [CynkyA
 
 - No Thread.Sleeps or implicit waits
 
+- No StaleElementReferenceException
+
 - No test retries 
 
 - Different challenges and hurdles
