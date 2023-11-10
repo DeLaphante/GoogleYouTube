@@ -1,5 +1,5 @@
 # GoogleYouTube
-Demonstration of automating Google & YouTube Search scenarios powered by [CynkyAutomation](https://github.com/DeLaphante/CynkyAutomation)
+Demonstration of automating Google & YouTube Search UI scenarios powered by [CynkyAutomation](https://github.com/DeLaphante/CynkyAutomation)
 
 - Same C# Framework (CynkyAutomation)
 
