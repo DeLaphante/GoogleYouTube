@@ -24,7 +24,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         public void NavigateToGoogleSearchHomePage()
         {
-            _Driver.Navigate().GoToUrl(CynkyConfigManager.SiteUrl);
+            _Driver.Navigate().GoToUrl(CynkyConfigManager.BaseSiteUrl);
             if (Button("Reject all").ElementExists())
                 Button("Reject all").Click();
         }
