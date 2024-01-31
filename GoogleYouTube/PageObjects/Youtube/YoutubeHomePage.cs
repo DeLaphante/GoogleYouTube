@@ -15,8 +15,9 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         #region Locators
 
-        PageElement Search_textbox => new PageElement(_Driver, By.XPath($"//input[@id='search']"));
-        PageElement Results_label => new PageElement(_Driver, By.XPath($"//ytd-video-renderer|//ytd-playlist-renderer"));
+        PageElement Search_label => new PageElement(_Driver, By.XPath($"//span[text()='Search YouTube']"));
+        PageElement Search_textbox => new PageElement(_Driver, By.XPath($"//input[@id='search' or @name='search']"));
+        PageElement Results_label => new PageElement(_Driver, By.XPath($"//ytd-video-renderer|//ytd-playlist-renderer|//ytm-video-with-context-renderer"));
 
         #endregion
 
@@ -24,6 +25,8 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         public void Search(string term)
         {
+            if(Search_label.IsDisplayed())
+                Search_label.Click();
             Search_textbox.Click();
             Search_textbox.SendKeysNoValidation(term + Keys.Enter);
         }
