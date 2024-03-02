@@ -25,7 +25,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         public void Search(string term)
         {
-            if(Search_label.IsDisplayed())
+            if (Search_label.IsDisplayed())
                 Search_label.Click();
             Search_textbox.Click();
             Search_textbox.SendKeysNoValidation(term + Keys.Enter);
@@ -33,7 +33,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         public int GetNumberOfSearchResults()
         {
-            if (!Results_label.IsDisplayed() && !Results_label.ElementExists())
+            if (!Results_label.IsDisplayed() && !Results_label.ElementExists() && !Results_label.IsDisplayed())
                 throw new Exception("Results not displayed!");
             return Results_label.GetAllElements().Count;
         }
