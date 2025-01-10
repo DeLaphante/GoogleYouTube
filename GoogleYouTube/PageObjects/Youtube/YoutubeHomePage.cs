@@ -33,8 +33,6 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         public int GetNumberOfSearchResults()
         {
-            if (!Results_label.IsDisplayed())
-                throw new Exception("Results not displayed!");
             return Results_label.GetAllElements().Count;
         }
         #endregion
