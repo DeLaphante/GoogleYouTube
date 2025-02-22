@@ -15,7 +15,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         #region Locators
 
-        PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//button[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"]|//input[@value=\"{text}\"]|//a[not(ancestor::div[contains(@class,'banner')]) and translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\" or contains(@class,\"{text}\")]|//a[not(ancestor::div[contains(@class,'banner')]) and span[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"]]|//button[span[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"]]|//p[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"])[{index}]"));
+        PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//*[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')= \"{text.ToLower()}\" and not(self::span and count(../span) >1)]//ancestor::*[(self::button or self::a or @onclick or @role='button') and not(contains(@class,'banner'))])[{index}]"));
 
         #endregion
 
