@@ -15,8 +15,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         #region Locators
 
-        PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//button[contains(.,'{text}')])[{index}]"));
-        PageElement YouTube_button(string text) => new PageElement(_Driver, By.XPath($"//button[contains(.,'{text}') and contains(@class,'button-shape')]"));
+        PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//button[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"]|//input[@value=\"{text}\"]|//a[not(ancestor::div[contains(@class,'banner')]) and translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\" or contains(@class,\"{text}\")]|//a[not(ancestor::div[contains(@class,'banner')]) and span[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"]]|//button[span[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"]]|//p[translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')=\"{text.ToLower()}\"])[{index}]"));
 
         #endregion
 
@@ -32,8 +31,8 @@ namespace GoogleYouTube.PageObjects.CommonPages
         public void NavigateToYouTubeHomePage()
         {
             _Driver.Navigate().GoToUrl("https://www.youtube.com/");
-            if (YouTube_button("Reject all").ElementExists())
-                YouTube_button("Reject all").Click();
+            if (Button("Reject all").ElementExists())
+                Button("Reject all").Click();
         }
 
         #endregion
