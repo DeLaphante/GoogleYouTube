@@ -1,6 +1,5 @@
 ﻿using CynkyDriver;
 using OpenQA.Selenium;
-using System;
 
 namespace GoogleYouTube.PageObjects.CommonPages
 {
