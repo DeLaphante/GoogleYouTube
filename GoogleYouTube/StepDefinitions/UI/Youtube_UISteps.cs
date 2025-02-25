@@ -24,7 +24,7 @@ namespace GoogleYouTube.StepDefinitions.UI
         [StepDefinition(@"a YouTube search results with atleast '([^']*)' items is displayed")]
         public void ThenASearchResultsWithAtleastItemsIsDisplayed(int numberOfItems)
         {
-            _YouTubeHomePage.GetNumberOfSearchResults().Should().BeGreaterThan(numberOfItems);
+            _YouTubeHomePage.GetNumberOfSearchResults().Should().BeGreaterThanOrEqualTo(numberOfItems);
         }
 
 
