@@ -15,7 +15,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         #region Locators
 
-        PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//*[(self::button or self::a or @onclick or @role='button')  and contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),\"{text.ToLower()}\") and not(contains(@class,'disable') or @disabled)])[{index}]"));
+        PageElement Button(string text, int index = 1) => new PageElement(_Driver, By.XPath($"(//*[(self::button or self::a or self::input or @onclick or @role='button')  and (contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),\"{text.ToLower()}\") or contains(@class,\"{text}\") or contains(@title,\"{text}\") or contains(@value,\"{text}\")) and not(contains(@class,'disable') or @disabled)])[{index}]"));
 
         #endregion
 
