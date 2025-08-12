@@ -46,9 +46,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CynkyAnalysis">
-      <HintPath>..\..\..\..\..\..\source\repos\Cynky\CynkyHooks\CynkyAnalysis.dll</HintPath>
-    </Reference>
     <Reference Include="CynkyHook">
       <HintPath>CynkyHook.dll</HintPath>
     </Reference>
