@@ -1,4 +1,4 @@
-name: CI with Video Recording
+name: CI with Headless Video Recording
 
 on: [push]
 
@@ -7,32 +7,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x' # Or your .NET version
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Install FFmpeg
-      run: sudo apt-get update && sudo apt-get install -y ffmpeg xvfb
+      - name: Install FFmpeg and Xvfb
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg xvfb
 
-    - name: Start Xvfb (Virtual Display)
-      run: Xvfb :99 -screen 0 1280x1024x24 & # Match this resolution to your code's -video_size
-      env:
-        DISPLAY: :99 # Set DISPLAY for subsequent steps
+      - name: Start Virtual Display for Recording
+        run: |
+          Xvfb :99 -screen 0 1280x1024x24 &
+          sleep 3
+        env:
+          DISPLAY: :99
 
-    - name: Run Tests with Video Recording
-      run: |
+      - name: Run Tests in Headless Mode with Video
         run: dotnet test --no-build --verbosity normal --configuration Release
-      env:
-        DISPLAY: :99 # Ensure DISPLAY is set for tests
-        // For example: HEADLESS_MODE=true
+        env:
+          HEADLESS_MODE: true
+          DISPLAY: :99
 
-    - name: Upload Videos (if any)
-      uses: actions/upload-artifact@v4
-      if: always() # Upload even if tests fail
-      with:
-        name: test-videos
-        path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4 # Adjust path as needed
-        retention-days: 5
+      - name: Upload Videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-videos
+          path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4
+          retention-days: 5
