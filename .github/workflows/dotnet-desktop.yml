@@ -1,4 +1,4 @@
-name: CI with Video Recording
+name: CI with Headless Video Recording
 
 on: [push]
 
@@ -7,33 +7,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repo
       - uses: actions/checkout@v4
 
+      # Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x' # Or your .NET version
+          dotnet-version: '8.0.x'
 
+      # Install FFmpeg and Xvfb
       - name: Install FFmpeg and Xvfb
         run: sudo apt-get update && sudo apt-get install -y ffmpeg xvfb
 
-      - name: Start Xvfb (Virtual Display)
+      # Automatically find the solution (.sln) or project (.csproj)
+      - name: Detect Solution or Project
+        id: detect_solution
+        run: |
+          SOLUTION=$(find . -maxdepth 2 -name "*.sln" | head -n 1)
+          if [ -z "$SOLUTION" ]; then
+            SOLUTION=$(find . -maxdepth 2 -name "*.csproj" | head -n 1)
+          fi
+          echo "SOLUTION_PATH=$SOLUTION" >> $GITHUB_ENV
+          echo "Detected solution/project: $SOLUTION"
+
+      # Restore NuGet packages
+      - name: Restore NuGet Packages
+        run: dotnet restore "$SOLUTION_PATH"
+
+      # Build solution/project
+      - name: Build
+        run: dotnet build "$SOLUTION_PATH" --configuration Release --no-restore
+
+      # Start Xvfb for video recording
+      - name: Start Virtual Display
         run: |
           Xvfb :99 -screen 0 1280x1024x24 &
-          sleep 3 # Give Xvfb time to start
+          sleep 3
         env:
           DISPLAY: :99
 
+      # Run tests in headless mode
       - name: Run Tests with Video Recording
-        run: dotnet test --verbosity normal --configuration Release
+        run: dotnet test "$SOLUTION_PATH" --configuration Release --no-build --verbosity normal
         env:
           DISPLAY: :99
-          # HEADLESS_MODE=true
+          HEADLESS_MODE: true
 
-      - name: Upload Videos (if any)
+      # Upload recorded videos
+      - name: Upload Videos
         uses: actions/upload-artifact@v4
-        if: always() # Upload even if tests fail
+        if: always()
         with:
           name: test-videos
-          path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4 # Adjust path as needed
+          path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4
           retention-days: 5
