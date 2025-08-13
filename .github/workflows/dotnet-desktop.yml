@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest # Use Ubuntu runner for Linux environment
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -19,19 +19,17 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install Xvfb and FFmpeg
+    - name: Install Xvfb
       run: |
         sudo apt-get update
-        sudo apt-get install -y xvfb # Install Xvfb for the virtual display
-        # The AnimMouse/setup-ffmpeg action already installs FFmpeg: https://github.com/marketplace/actions/setup-ffmpeg-action
-        # So we just need to install Xvfb here.
+        sudo apt-get install -y xvfb x11-utils
 
     - name: Install FFmpeg
       uses: AnimMouse/setup-ffmpeg@v1
       with:
-        version: latest # Install the latest release version of FFmpeg
+        version: latest
 
-    - name: Install dependencies
+    - name: Restore dependencies
       run: dotnet restore
 
     - name: Build project
@@ -39,15 +37,13 @@ jobs:
 
     - name: Run Reqnroll tests with C# video recording
       run: |
-        # Start Xvfb and run your tests within the virtual display
-        # The DISPLAY variable directs graphical output to the Xvfb screen
-        xvfb-run --auto-display --server-args="-screen 0 1920x1080x24" dotnet test --configuration Release 
+        xvfb-run --auto-servernum --server-args="-screen 0 1280x1696x24" \
+          dotnet test --configuration Release
       shell: bash
-
 
     - name: Upload video recordings
       uses: actions/upload-artifact@v4
       with:
         name: Reqnroll-Test-Videos
-        path: bin/Release/net8.0/Reports/Results/Videos # Path to your video files
+        path: bin/Release/net8.0/Reports/Results/Videos
         retention-days: 7
