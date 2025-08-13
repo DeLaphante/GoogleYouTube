@@ -24,7 +24,7 @@ jobs:
 
     - name: Run Tests with Video Recording
       run: |
-        dotnet test --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage" --settings "coverlet.runsettings"
+        run: dotnet test --no-build --verbosity normal --configuration Release
       env:
         DISPLAY: :99 # Ensure DISPLAY is set for tests
         // For example: HEADLESS_MODE=true
