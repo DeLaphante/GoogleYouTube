@@ -1,15 +1,15 @@
-name: Reqnroll Tests with C# Video Recording (FFmpeg)
+name: Reqnroll Tests with C# Video Recording (Linux)
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch: # Allows manual triggering of the workflow
+  workflow_dispatch:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest # Use Windows runner for potential dependencies with your C# code
+    runs-on: ubuntu-latest # Use Ubuntu runner for Linux environment
 
     steps:
     - uses: actions/checkout@v4
@@ -17,10 +17,17 @@ jobs:
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x' # Specify your .NET SDK version
+        dotnet-version: '8.0.x'
+
+    - name: Install Xvfb and FFmpeg
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb # Install Xvfb for the virtual display
+        # The AnimMouse/setup-ffmpeg action already installs FFmpeg: https://github.com/marketplace/actions/setup-ffmpeg-action
+        # So we just need to install Xvfb here.
 
     - name: Install FFmpeg
-      uses: AnimMouse/setup-ffmpeg@v1 # Action to install FFmpeg on Windows, macOS, and Ubuntu runners
+      uses: AnimMouse/setup-ffmpeg@v1
       with:
         version: latest # Install the latest release version of FFmpeg
 
@@ -32,15 +39,15 @@ jobs:
 
     - name: Run Reqnroll tests with C# video recording
       run: |
-        # Assume your C# code handles starting and stopping FFmpeg
-        dotnet test --configuration Release 
-        # The test executable is at bin\Release\net8.0, and the videos are saved to bin\Release\net8.0\Reports\Results\Videos
-        # Therefore, the videos will be relative to the test executable's directory.
-      shell: pwsh # Use PowerShell on Windows runners
+        # Start Xvfb and run your tests within the virtual display
+        # The DISPLAY variable directs graphical output to the Xvfb screen
+        xvfb-run --auto-display --server-args="-screen 0 1920x1080x24" dotnet test --configuration Release 
+      shell: bash
+
 
     - name: Upload video recordings
       uses: actions/upload-artifact@v4
       with:
         name: Reqnroll-Test-Videos
-        path: bin/Release/net8.0/Reports/Results/Videos # Path to the directory containing your recorded videos
-        retention-days: 7 # Optional: Set retention days for the artifact
+        path: bin/Release/net8.0/Reports/Results/Videos # Path to your video files
+        retention-days: 7
