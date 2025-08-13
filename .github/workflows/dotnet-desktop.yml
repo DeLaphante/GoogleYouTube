@@ -17,6 +17,9 @@ jobs:
       - name: Install FFmpeg and Xvfb
         run: sudo apt-get update && sudo apt-get install -y ffmpeg xvfb
 
+      - name: Build Solution
+        run: dotnet build --configuration Release
+
       - name: Start Virtual Display for Recording
         run: |
           Xvfb :99 -screen 0 1280x1024x24 &
@@ -25,7 +28,7 @@ jobs:
           DISPLAY: :99
 
       - name: Run Tests in Headless Mode with Video
-        run: dotnet test --no-build --verbosity normal --configuration Release
+        run: dotnet test --configuration Release --verbosity normal
         env:
           HEADLESS_MODE: true
           DISPLAY: :99
