@@ -19,15 +19,10 @@ jobs:
       with:
         dotnet-version: '8.0.x'
 
-    - name: Install Xvfb
+    - name: Install Xvfb and FFmpeg
       run: |
         sudo apt-get update
-        sudo apt-get install -y xvfb x11-utils
-
-    - name: Install FFmpeg
-      uses: AnimMouse/setup-ffmpeg@v1
-      with:
-        version: latest
+        sudo apt-get install -y xvfb x11-utils ffmpeg
 
     - name: Restore dependencies
       run: dotnet restore
@@ -37,7 +32,7 @@ jobs:
 
     - name: Run Reqnroll tests with C# video recording
       run: |
-        xvfb-run --auto-servernum --server-args="-screen 0 1280x1696x24" \
+        xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
           dotnet test --configuration Release
       shell: bash
 
