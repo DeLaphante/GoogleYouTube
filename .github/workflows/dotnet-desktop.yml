@@ -1,4 +1,4 @@
-name: CI with Headless Video Recording
+name: CI with Video Recording
 
 on: [push]
 
@@ -12,31 +12,28 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '8.0.x' # Or your .NET version
 
       - name: Install FFmpeg and Xvfb
         run: sudo apt-get update && sudo apt-get install -y ffmpeg xvfb
 
-      - name: Build Solution
-        run: dotnet build --configuration Release
-
-      - name: Start Virtual Display for Recording
+      - name: Start Xvfb (Virtual Display)
         run: |
           Xvfb :99 -screen 0 1280x1024x24 &
-          sleep 3
+          sleep 3 # Give Xvfb time to start
         env:
           DISPLAY: :99
 
-      - name: Run Tests in Headless Mode with Video
-        run: dotnet test --configuration Release --verbosity normal
+      - name: Run Tests with Video Recording
+        run: dotnet test --verbosity normal --configuration Release
         env:
-          HEADLESS_MODE: true
           DISPLAY: :99
+          # HEADLESS_MODE=true
 
-      - name: Upload Videos
+      - name: Upload Videos (if any)
         uses: actions/upload-artifact@v4
-        if: always()
+        if: always() # Upload even if tests fail
         with:
           name: test-videos
-          path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4
+          path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4 # Adjust path as needed
           retention-days: 5
