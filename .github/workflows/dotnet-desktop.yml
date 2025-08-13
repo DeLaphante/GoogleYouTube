@@ -1,64 +1,46 @@
-name: CI with Headless Video Recording
+name: Reqnroll Tests with C# Video Recording (FFmpeg)
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest # Use Windows runner for potential dependencies with your C# code
 
     steps:
-      # Checkout repo
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      # Setup .NET
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' # Specify your .NET SDK version
 
-      # Install FFmpeg and Xvfb
-      - name: Install FFmpeg and Xvfb
-        run: sudo apt-get update && sudo apt-get install -y ffmpeg xvfb
+    - name: Install FFmpeg
+      uses: AnimMouse/setup-ffmpeg@v1 # Action to install FFmpeg on Windows, macOS, and Ubuntu runners
+      with:
+        version: latest # Install the latest release version of FFmpeg
 
-      # Automatically find the solution (.sln) or project (.csproj)
-      - name: Detect Solution or Project
-        id: detect_solution
-        run: |
-          SOLUTION=$(find . -maxdepth 2 -name "*.sln" | head -n 1)
-          if [ -z "$SOLUTION" ]; then
-            SOLUTION=$(find . -maxdepth 2 -name "*.csproj" | head -n 1)
-          fi
-          echo "SOLUTION_PATH=$SOLUTION" >> $GITHUB_ENV
-          echo "Detected solution/project: $SOLUTION"
+    - name: Install dependencies
+      run: dotnet restore
 
-      # Restore NuGet packages
-      - name: Restore NuGet Packages
-        run: dotnet restore "$SOLUTION_PATH"
+    - name: Build project
+      run: dotnet build --configuration Release
 
-      # Build solution/project
-      - name: Build
-        run: dotnet build "$SOLUTION_PATH" --configuration Release --no-restore
+    - name: Run Reqnroll tests with C# video recording
+      run: |
+        # Assume your C# code handles starting and stopping FFmpeg
+        dotnet test --configuration Release 
+        # The test executable is at bin\Release\net8.0, and the videos are saved to bin\Release\net8.0\Reports\Results\Videos
+        # Therefore, the videos will be relative to the test executable's directory.
+      shell: pwsh # Use PowerShell on Windows runners
 
-      # Start Xvfb for video recording
-      - name: Start Virtual Display
-        run: |
-          Xvfb :99 -screen 0 1280x1024x24 &
-          sleep 3
-        env:
-          DISPLAY: :99
-
-      # Run tests in headless mode
-      - name: Run Tests with Video Recording
-        run: dotnet test "$SOLUTION_PATH" --configuration Release --no-build --verbosity normal
-        env:
-          DISPLAY: :99
-          HEADLESS_MODE: true
-
-      # Upload recorded videos
-      - name: Upload Videos
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: test-videos
-          path: ${{ github.workspace }}/Reports/Results/Videos/**/*.mp4
-          retention-days: 5
+    - name: Upload video recordings
+      uses: actions/upload-artifact@v4
+      with:
+        name: Reqnroll-Test-Videos
+        path: bin/Release/net8.0/Reports/Results/Videos # Path to the directory containing your recorded videos
+        retention-days: 7 # Optional: Set retention days for the artifact
