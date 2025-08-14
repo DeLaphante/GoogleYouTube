@@ -10,31 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y xvfb x11-utils ffmpeg
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb x11-utils ffmpeg
 
-    - name: Restore dependencies
-      run: dotnet restore --use-current-runtime
+      - name: Restore dependencies
+        run: dotnet restore --use-current-runtime
 
-    - name: Build project
-      run: dotnet build --no-restore --configuration Release
+      - name: Build project
+        run: dotnet build --no-restore --configuration Release
 
-    - name: Run Tests
-      run: dotnet test --no-build --verbosity normal --configuration Release
+      - name: Run Tests with Video Recording
+        run: xvfb-run -a dotnet test --no-build --verbosity normal --configuration Release
 
-    - name: Upload video recordings
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: Videos
-        path: /home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
-        retention-days: 7
+      - name: Upload video recordings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Videos
+          path: bin/Release/net8.0/Reports/Results/Videos
+          retention-days: 7
