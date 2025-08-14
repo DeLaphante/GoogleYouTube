@@ -1,9 +1,7 @@
-name: Reqnroll Tests with C# Video Recording (Linux)
+name: Video Recording Tests
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
   workflow_dispatch:
 
@@ -25,21 +23,14 @@ jobs:
         sudo apt-get install -y xvfb x11-utils ffmpeg
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore --use-current-runtime
 
     - name: Build project
-      run: dotnet build --configuration Release
+      run: dotnet build --no-restore --configuration Release
 
     - name: Run Reqnroll tests with C# video recording
-      run: |
-        # Start virtual display
-        export DISPLAY=:99
-        Xvfb :99 -screen 0 1280x1696x24 &
-        sleep 3  # give Xvfb time to initialize
+      run: dotnet test --no-build --verbosity normal --configuration Release
 
-        # Run tests
-        dotnet test --configuration Release
-      shell: bash
 
     - name: Upload video recordings
       if: always()
