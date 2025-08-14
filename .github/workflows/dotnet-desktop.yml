@@ -36,5 +36,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Reqnroll-Test-Videos
-        path: /home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
+        path: /home/runner/work/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
         retention-days: 7
