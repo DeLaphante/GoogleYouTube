@@ -31,26 +31,37 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb x11-utils ffmpeg
 
+      - name: Ensure video folder exists
+        run: mkdir -p GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
+
       - name: Restore dependencies
         run: dotnet restore --use-current-runtime
 
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
-      - name: Start Xvfb and run tests
+      - name: Run Tests
         run: |
-          # Start virtual framebuffer for headless browser
-          Xvfb :99 -screen 0 1280x1696x24 & 
+          # Start virtual framebuffer for headless browser rendering
+          Xvfb :99 -screen 0 1280x1696x24 &
           export DISPLAY=:99
-          # Suppress X keyboard warnings
+          # Suppress xkb warnings
           export XKB_DEFAULT_RULES=base
           sleep 2
-          # Run tests
           dotnet test --no-build --verbosity normal --configuration Release
 
       - name: Upload video reports
-        uses: actions/upload-artifact@v4
         if: always()
+        run: |
+          VIDEOS_DIR="GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos"
+          if [ -d "$VIDEOS_DIR" ] && [ "$(ls -A $VIDEOS_DIR)" ]; then
+            echo "Uploading videos..."
+            echo "$VIDEOS_DIR"
+          else
+            echo "No video files found in $VIDEOS_DIR"
+            exit 0
+          fi
+        uses: actions/upload-artifact@v4
         with:
-          name: Reports
-          path: "/home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/"
+          name: VideoReports
+          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**/*
