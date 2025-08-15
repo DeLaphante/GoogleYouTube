@@ -50,6 +50,8 @@ jobs:
           sleep 2
           # Run tests
           dotnet test --no-build --verbosity normal --configuration Release
+          # Wait 5 seconds to ensure ffmpeg flushes final frames
+          sleep 5
 
       - name: Upload video reports
         uses: actions/upload-artifact@v4
