@@ -50,12 +50,9 @@ jobs:
           sleep 2
           dotnet test --no-build --verbosity normal --configuration Release
 
-      - name: List videos for debugging
-        run: ls -l GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
-
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
         with: 
           name: Reports
-          path: "GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**"
+          path: "GoogleYouTube/bin/Release/net8.0/Reports/"
