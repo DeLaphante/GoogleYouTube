@@ -17,10 +17,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # Install FFmpeg
-      - name: Install FFmpeg
-        run: sudo apt-get install -y ffmpeg
-
       # Restore project dependencies
       - name: Restore dependencies
         run: dotnet restore
