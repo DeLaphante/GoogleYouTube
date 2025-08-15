@@ -17,13 +17,46 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # Install FFmpeg
+      # Cache FFmpeg binary
+      - name: Cache FFmpeg
+        id: ffmpeg-cache
+        uses: actions/cache@v3
+        with:
+          path: ~/ffmpeg
+          key: ffmpeg-ubuntu-latest
       - name: Install FFmpeg
-        run: sudo apt-get install -y ffmpeg
+        if: steps.ffmpeg-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/ffmpeg
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          cp /usr/bin/ffmpeg ~/ffmpeg/
+      - name: Add FFmpeg to PATH
+        run: echo "$HOME/ffmpeg" >> $GITHUB_PATH
+
+      # Cache NuGet packages
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: nuget-packages-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-packages-
 
       # Restore project dependencies
       - name: Restore dependencies
         run: dotnet restore
+
+      # Cache build output
+      - name: Cache build output
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/bin
+            **/obj
+          key: build-output-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            build-output-
 
       # Build the project
       - name: Build
