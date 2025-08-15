@@ -19,7 +19,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # Install SkiaSharp + FFmpeg dependencies on Linux
+      # Install Linux dependencies + FFmpeg + Xvfb
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
@@ -38,7 +38,14 @@ jobs:
             libsm6 \
             libc6-dev \
             libglib2.0-0 \
-            ffmpeg
+            ffmpeg \
+            xvfb
+
+      # Start virtual framebuffer for headless SkiaSharp
+      - name: Start Xvfb
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99
 
       # Restore NuGet packages
       - name: Restore dependencies
@@ -48,7 +55,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      # Run tests
+      # Run tests (headless)
       - name: Run Tests
         run: dotnet test --no-build --configuration Release
 
