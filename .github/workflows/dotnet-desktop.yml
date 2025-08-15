@@ -6,37 +6,27 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install system dependencies (Xvfb, ffmpeg, libgdiplus, fonts)
-        run: |
-          sudo apt-get update
-          # install Xvfb/ffmpeg and native libgdiplus + fonts for System.Drawing on Linux
-          sudo apt-get install -y xvfb x11-utils ffmpeg libgdiplus fonts-liberation libx11-6 libxrender1
-          # show versions for quick debugging
-          echo "ffmpeg version:"
-          ffmpeg -version
-          echo "libgdiplus present:"
-          ldconfig -p | grep libgdiplus || true
+      - name: Install SkiaSharp Linux dependencies
+        run: sudo apt-get update && sudo apt-get install -y libfontconfig1 libice6 libsm6
 
       - name: Restore dependencies
-        run: dotnet restore --use-current-runtime
+        run: dotnet restore
 
-      - name: Build project
-        run: dotnet build --no-restore --configuration Release
+      - name: Build
+        run: dotnet build --no-restore
 
-      - name: Run tests
-        run: dotnet test --no-build --verbosity normal --configuration Release
+      - name: Run Tests
+        run: dotnet test --no-build
 
       - name: Upload video reports
         uses: actions/upload-artifact@v4
