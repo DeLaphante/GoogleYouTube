@@ -31,9 +31,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb x11-utils ffmpeg
 
-      - name: Ensure video folder exists
-        run: mkdir -p GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
-
       - name: Restore dependencies
         run: dotnet restore --use-current-runtime
 
@@ -56,4 +53,4 @@ jobs:
         if: always()
         with:
           name: Reports
-          path: "/home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/"
+          path: "/home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/"
