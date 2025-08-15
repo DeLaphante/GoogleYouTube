@@ -36,10 +36,31 @@ jobs:
         export DISPLAY=:99
         dotnet test --no-build --verbosity normal --configuration Release
 
-    - name: Upload video recordings
+    - name: Debug — List all files
+      if: always()
+      run: |
+        echo "Listing all files in workspace for debugging..."
+        find . -type f | sort
+
+    - name: Upload video recordings (if exists)
+      if: always()
+      run: |
+        if [ -d "$(find . -type d -path '*/Reports/Results/Videos' | head -n 1)" ]; then
+          echo "Videos folder found, uploading..."
+          VIDEOS_DIR=$(find . -type d -path '*/Reports/Results/Videos' | head -n 1)
+          echo "Found at: $VIDEOS_DIR"
+          tar -czf videos.tar.gz -C "$VIDEOS_DIR" .
+          echo "Uploading videos.tar.gz"
+        else
+          echo "No videos found, skipping upload."
+          exit 0
+        fi
+      shell: bash
+
+    - name: Upload artifact
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: Videos
-        path: '**/Reports/Results/Videos'
+        path: videos.tar.gz
         retention-days: 7
