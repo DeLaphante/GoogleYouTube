@@ -56,4 +56,4 @@ jobs:
         if: always()
         with:
           name: Reports
-          path: "GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**"
+          path: "/home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/"
