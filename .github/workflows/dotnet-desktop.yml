@@ -10,16 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout code
       - uses: actions/checkout@v3
 
-      # Setup .NET 8
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      # Install Linux dependencies + FFmpeg + Xvfb
+      # Install Linux dependencies + FFmpeg + OSMesa
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
@@ -39,33 +37,24 @@ jobs:
             libc6-dev \
             libglib2.0-0 \
             ffmpeg \
-            xvfb
+            libosmesa6-dev \
+            mesa-utils
 
-      # Start virtual framebuffer for headless SkiaSharp
-      - name: Start Xvfb
+      # Set software rendering for SkiaSharp
+      - name: Enable Software Rendering
         run: |
-          Xvfb :99 -screen 0 1920x1080x24 &
-          sleep 3
-        env:
-          DISPLAY: :99
+          export SKIA_GL_DRIVER=swiftshader
+          export SKIA_VK_DRIVER=swiftshader
 
-      # Export DISPLAY for all following steps
-      - name: Set DISPLAY environment
-        run: echo "DISPLAY=:99" >> $GITHUB_ENV
-
-      # Restore NuGet packages
       - name: Restore dependencies
         run: dotnet restore
 
-      # Build without restoring
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      # Run tests (headless)
       - name: Run Tests
         run: dotnet test --no-build --configuration Release
 
-      # Upload video reports
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
