@@ -8,29 +8,54 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout code
       - uses: actions/checkout@v3
 
+      # Setup .NET 8
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install SkiaSharp Linux dependencies
-        run: sudo apt-get update && sudo apt-get install -y libfontconfig1 libice6 libsm6
+      # Install SkiaSharp + FFmpeg dependencies on Linux
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libfontconfig1 \
+            libfreetype6 \
+            libx11-6 \
+            libxext6 \
+            libxrender1 \
+            libxcb1 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxrandr2 \
+            libxi6 \
+            libice6 \
+            libsm6 \
+            libc6-dev \
+            libglib2.0-0 \
+            ffmpeg
 
+      # Restore NuGet packages
       - name: Restore dependencies
         run: dotnet restore
 
+      # Build without restoring
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build --no-restore --configuration Release
 
+      # Run tests
       - name: Run Tests
-        run: dotnet test --no-build
+        run: dotnet test --no-build --configuration Release
 
+      # Upload video reports
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: VideoReports
-          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/** 
+          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**
