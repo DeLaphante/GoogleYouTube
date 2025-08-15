@@ -31,13 +31,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb x11-utils ffmpeg
 
+      - name: Ensure Videos folder exists
+        run: mkdir -p GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
+
       - name: Restore dependencies
         run: dotnet restore --use-current-runtime
 
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
-      - name: Start Xvfb and run tests with reduced FPS
+      - name: Start Xvfb and run tests
         run: |
           # Start virtual framebuffer for headless browser
           Xvfb :99 -screen 0 1280x1696x24 & 
@@ -45,8 +48,6 @@ jobs:
           # Suppress X keyboard warnings
           export XKB_DEFAULT_RULES=base
           sleep 2
-          # Set environment variable for CI to force FPS=10
-          export VIDEO_TARGET_FPS=10
           # Run tests
           dotnet test --no-build --verbosity normal --configuration Release
 
@@ -54,5 +55,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Reports
-          path: "/home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/"
+          name: VideoReports
+          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/
