@@ -21,10 +21,6 @@ jobs:
       - name: Install FFmpeg
         run: sudo apt-get install -y ffmpeg
 
-      # Install SkiaSharp native Linux dependencies
-      - name: Install SkiaSharp dependencies
-        run: sudo apt-get install -y libgl1-mesa-dev libfontconfig1 libice6 libsm6
-
       # Restore project dependencies
       - name: Restore dependencies
         run: dotnet restore
