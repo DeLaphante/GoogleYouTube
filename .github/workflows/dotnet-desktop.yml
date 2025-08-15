@@ -31,6 +31,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y xvfb x11-utils ffmpeg
 
+      - name: Ensure video folder exists
+        run: mkdir -p GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
+
       - name: Restore dependencies
         run: dotnet restore --use-current-runtime
 
@@ -42,14 +45,17 @@ jobs:
           # Start virtual framebuffer for headless browser rendering
           Xvfb :99 -screen 0 1280x1696x24 & 
           export DISPLAY=:99
-          # Optional: suppress xkb warnings
+          # Suppress xkb warnings
           export XKB_DEFAULT_RULES=base
           sleep 2
           dotnet test --no-build --verbosity normal --configuration Release
+
+      - name: List videos for debugging
+        run: ls -l GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
 
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
         with: 
           name: Reports
-          path: "GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos"
+          path: "GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**"
