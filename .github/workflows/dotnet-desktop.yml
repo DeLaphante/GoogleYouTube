@@ -18,10 +18,16 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install system dependencies
+      - name: Install system dependencies (Xvfb, ffmpeg, libgdiplus, fonts)
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb x11-utils ffmpeg
+          # install Xvfb/ffmpeg and native libgdiplus + fonts for System.Drawing on Linux
+          sudo apt-get install -y xvfb x11-utils ffmpeg libgdiplus fonts-liberation libx11-6 libxrender1
+          # show versions for quick debugging
+          echo "ffmpeg version:"
+          ffmpeg -version
+          echo "libgdiplus present:"
+          ldconfig -p | grep libgdiplus || true
 
       - name: Restore dependencies
         run: dotnet restore --use-current-runtime
@@ -37,4 +43,4 @@ jobs:
         if: always()
         with:
           name: VideoReports
-          path: /home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/
+          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/** 
