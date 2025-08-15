@@ -17,7 +17,7 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # Install Linux dependencies + FFmpeg + OSMesa
+      # Install Linux dependencies + FFmpeg + Mesa + Xvfb
       - name: Install Linux Dependencies
         run: |
           sudo apt-get update
@@ -38,13 +38,15 @@ jobs:
             libglib2.0-0 \
             ffmpeg \
             libosmesa6-dev \
-            mesa-utils
+            mesa-utils \
+            xvfb
 
-      # Set software rendering for SkiaSharp
-      - name: Enable Software Rendering
+      # Start virtual framebuffer for SkiaSharp
+      - name: Start Xvfb
         run: |
-          export SKIA_GL_DRIVER=swiftshader
-          export SKIA_VK_DRIVER=swiftshader
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99
+          echo "DISPLAY=:99" >> $GITHUB_ENV
 
       - name: Restore dependencies
         run: dotnet restore
@@ -52,8 +54,11 @@ jobs:
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
+      # Run inside Xvfb environment
       - name: Run Tests
-        run: dotnet test --no-build --configuration Release
+        run: |
+          export DISPLAY=:99
+          dotnet test --no-build --configuration Release
 
       - name: Upload video reports
         uses: actions/upload-artifact@v4
