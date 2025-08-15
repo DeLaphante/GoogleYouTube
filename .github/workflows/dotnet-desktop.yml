@@ -35,3 +35,9 @@ jobs:
         Xvfb :99 -screen 0 1280x1696x24 &
         export DISPLAY=:99
         dotnet test --no-build --verbosity normal --configuration Release
+
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with: 
+        name: Reports
+        path: /home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
