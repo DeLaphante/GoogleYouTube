@@ -18,14 +18,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            nuget-${{ runner.os }}-
-
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -37,20 +29,12 @@ jobs:
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
-      - name: Start Xvfb and run tests
-        run: |
-          # Start virtual framebuffer for headless browser
-          Xvfb :99 -screen 0 1280x1696x24 & 
-          export DISPLAY=:99
-          # Suppress X keyboard warnings
-          export XKB_DEFAULT_RULES=base
-          sleep 2
-          # Run tests
-          dotnet test --no-build --verbosity normal --configuration Release
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal --configuration Release
 
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Reports
-          path: "/home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/"
+          name: VideoReports
+          path: /home/runner/work/GoogleYouTube/GoogleYouTube/GoogleYouTube/bin/Release/net8.0/Reports/
