@@ -6,41 +6,58 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      - name: Install system dependencies (Xvfb, ffmpeg, libgdiplus, fonts)
+      # Install Linux dependencies + FFmpeg + OSMesa
+      - name: Install Linux Dependencies
         run: |
           sudo apt-get update
-          # install Xvfb/ffmpeg and native libgdiplus + fonts for System.Drawing on Linux
-          sudo apt-get install -y xvfb x11-utils ffmpeg libgdiplus fonts-liberation libx11-6 libxrender1
-          # show versions for quick debugging
-          echo "ffmpeg version:"
-          ffmpeg -version
-          echo "libgdiplus present:"
-          ldconfig -p | grep libgdiplus || true
+          sudo apt-get install -y \
+            libfontconfig1 \
+            libfreetype6 \
+            libx11-6 \
+            libxext6 \
+            libxrender1 \
+            libxcb1 \
+            libx11-xcb1 \
+            libxcomposite1 \
+            libxrandr2 \
+            libxi6 \
+            libice6 \
+            libsm6 \
+            libc6-dev \
+            libglib2.0-0 \
+            ffmpeg \
+            libosmesa6-dev \
+            mesa-utils
+
+      # Set software rendering for SkiaSharp
+      - name: Enable Software Rendering
+        run: |
+          export SKIA_GL_DRIVER=swiftshader
+          export SKIA_VK_DRIVER=swiftshader
 
       - name: Restore dependencies
-        run: dotnet restore --use-current-runtime
+        run: dotnet restore
 
-      - name: Build project
+      - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      - name: Run tests
-        run: dotnet test --no-build --verbosity normal --configuration Release
+      - name: Run Tests
+        run: dotnet test --no-build --configuration Release
 
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: VideoReports
-          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/** 
+          path: GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**
