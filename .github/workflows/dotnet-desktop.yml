@@ -8,58 +8,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
+      # Setup .NET
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
 
-      # Install Linux dependencies + FFmpeg + Mesa + Xvfb
-      - name: Install Linux Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libfontconfig1 \
-            libfreetype6 \
-            libx11-6 \
-            libxext6 \
-            libxrender1 \
-            libxcb1 \
-            libx11-xcb1 \
-            libxcomposite1 \
-            libxrandr2 \
-            libxi6 \
-            libice6 \
-            libsm6 \
-            libc6-dev \
-            libglib2.0-0 \
-            ffmpeg \
-            libosmesa6-dev \
-            mesa-utils \
-            xvfb
+      # Install FFmpeg
+      - name: Install FFmpeg
+        run: sudo apt-get install -y ffmpeg
 
-      # Start virtual framebuffer for SkiaSharp
-      - name: Start Xvfb
-        run: |
-          Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
-          echo "DISPLAY=:99" >> $GITHUB_ENV
-
+      # Restore project dependencies
       - name: Restore dependencies
         run: dotnet restore
 
+      # Build the project
       - name: Build
         run: dotnet build --no-restore --configuration Release
 
-      # Run inside Xvfb environment
+      # Run tests
       - name: Run Tests
-        run: |
-          export DISPLAY=:99
-          dotnet test --no-build --configuration Release
+        run: dotnet test --no-build --configuration Release
 
+      # Upload recorded video reports
       - name: Upload video reports
         uses: actions/upload-artifact@v4
         if: always()
