@@ -10,57 +10,52 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y xvfb x11-utils ffmpeg
+      - name: Cache NuGet packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
 
-    - name: Restore dependencies
-      run: dotnet restore --use-current-runtime
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb x11-utils ffmpeg
 
-    - name: Build project
-      run: dotnet build --no-restore --configuration Release
+      - name: Ensure video folder exists
+        run: mkdir -p GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
 
-    - name: Run Tests
-      run: |
-        # Start virtual framebuffer to allow browser rendering
-        Xvfb :99 -screen 0 1280x720x24 &
-        export DISPLAY=:99
-        dotnet test --no-build --verbosity normal --configuration Release
+      - name: Restore dependencies
+        run: dotnet restore --use-current-runtime
 
-    - name: Debug — List all files
-      if: always()
-      run: |
-        echo "Listing all files in workspace for debugging..."
-        find . -type f | sort
+      - name: Build project
+        run: dotnet build --no-restore --configuration Release
 
-    - name: Upload video recordings (if exists)
-      if: always()
-      run: |
-        if [ -d "$(find . -type d -path '*/Reports/Results/Videos' | head -n 1)" ]; then
-          echo "Videos folder found, uploading..."
-          VIDEOS_DIR=$(find . -type d -path '*/Reports/Results/Videos' | head -n 1)
-          echo "Found at: $VIDEOS_DIR"
-          tar -czf videos.tar.gz -C "$VIDEOS_DIR" .
-          echo "Uploading videos.tar.gz"
-        else
-          echo "No videos found, skipping upload."
-          exit 0
-        fi
-      shell: bash
+      - name: Run Tests
+        run: |
+          # Start virtual framebuffer for headless browser rendering
+          Xvfb :99 -screen 0 1280x1696x24 & 
+          export DISPLAY=:99
+          # Suppress xkb warnings
+          export XKB_DEFAULT_RULES=base
+          sleep 2
+          dotnet test --no-build --verbosity normal --configuration Release
 
-    - name: Upload artifact
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: Videos
-        path: videos.tar.gz
-        retention-days: 7
+      - name: List videos for debugging
+        run: ls -l GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos
+
+      - name: Upload video reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with: 
+          name: Reports
+          path: "GoogleYouTube/bin/Release/net8.0/Reports/Results/Videos/**"
