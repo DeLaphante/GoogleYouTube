@@ -45,7 +45,13 @@ jobs:
       - name: Start Xvfb
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
+          sleep 3
+        env:
+          DISPLAY: :99
+
+      # Export DISPLAY for all following steps
+      - name: Set DISPLAY environment
+        run: echo "DISPLAY=:99" >> $GITHUB_ENV
 
       # Restore NuGet packages
       - name: Restore dependencies
