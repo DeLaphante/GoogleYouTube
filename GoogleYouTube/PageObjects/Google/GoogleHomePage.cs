@@ -24,7 +24,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
         public void Search(string term)
         {
             Search_textbox.Click();
-            Search_textbox.SendKeysNoValidation(term + Keys.Enter);
+            Search_textbox.SendKeys(term + Keys.Enter);
         }
 
         public int GetNumberOfSearchResults()

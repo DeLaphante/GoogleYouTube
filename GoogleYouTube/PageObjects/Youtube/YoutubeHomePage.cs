@@ -27,7 +27,7 @@ namespace GoogleYouTube.PageObjects.CommonPages
             if (Search_label.IsDisplayed())
                 Search_label.Click();
             Search_textbox.Click();
-            Search_textbox.SendKeysNoValidation(term + Keys.Enter);
+            Search_textbox.SendKeys(term + Keys.Enter);
         }
 
         public int GetNumberOfSearchResults()
