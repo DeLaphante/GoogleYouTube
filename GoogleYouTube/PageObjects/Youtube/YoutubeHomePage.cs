@@ -24,6 +24,9 @@ namespace GoogleYouTube.PageObjects.CommonPages
 
         public void Search(string term)
         {
+            if (Search_label.IsDisplayed())
+                Search_label.Click();
+            Search_textbox.Click();
             Search_textbox.SendKeys(term + Keys.Enter);
         }
 
